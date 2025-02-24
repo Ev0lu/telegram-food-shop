@@ -1,3 +1,14 @@
+# Telegram Food Market
+Веб-приложение для доставки, созданное на стеке React, Vite, TypeScript, RTK и RTK Query
+
+#Возможности
+Просмотр каталога товаров
+Добавление товаров в корзину
+Управление количеством товаров
+Оформление заказа
+Получение актуального состояния корзины с сервера
+Возможность пробить товар по QR-коду
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
