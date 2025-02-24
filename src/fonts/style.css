@@ -1,9 +1,0 @@
-@font-face {
-    font-family: '5ka Sans Design';
-    src: local('5ka Sans Design Regular'), local('5ka-Sans-Design-Regular'),
-        url('5kaSansDesign-Regular.woff2') format('woff2'),
-        url('5kaSansDesign-Regular.woff') format('woff'),
-        url('5kaSansDesign-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-  }
