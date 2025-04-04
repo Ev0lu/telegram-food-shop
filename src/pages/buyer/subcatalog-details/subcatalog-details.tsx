@@ -5,6 +5,7 @@ import Footer from '@/shared/footer/footer';
 import { useGetCatalogsCategoryQuery, useGetProductsQuery } from '@/shared/api/products';
 import { useCart } from '@/shared/api/cart';
 import { CartControls } from '@/shared/ui/cart-controls/cart-controls';
+import { useState } from 'react';
 
 function SubcatalogDetails() {
     const navigate = useNavigate();
@@ -14,6 +15,10 @@ function SubcatalogDetails() {
     const { data: category, isLoading: isLoadingCategory } = useGetCatalogsCategoryQuery(categoryId);
     const { data: products, isLoading: isLoadingProducts } = useGetProductsQuery(categoryId);
     const { cart, handleAddToCart, handleDecreaseItem } = useCart();
+    const [searchTerm, setSearchTerm] = useState('')
+    const filteredProducts = products?.products.filter((item: any) =>
+        item.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
 
     return (
         <div className={s.main_catalog}>
@@ -21,7 +26,10 @@ function SubcatalogDetails() {
                 <div className={`${s.main_catalog_search} ${s.fixedItemSearch}`}>
                     <div className={s.main_catalog_search_wrapper}>
                         <img className={s.main_catalog_search_image} src={search_image} alt="Поиск" />
-                        <input className={s.main_catalog_search_input} placeholder='Поиск по товарам' />
+                        <input
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className={s.main_catalog_search_input} placeholder='Поиск по товарам' />
                     </div>
                 </div>
                 <div className={s.top_category_name}>
@@ -34,11 +42,11 @@ function SubcatalogDetails() {
                             {isLoadingProducts ? (
                                 <p>Загрузка...</p>
                             ) : (
-                                products?.products.map((item) => (
+                                filteredProducts && filteredProducts.map((item) => (
                                     <div key={item.entry_id} className={s.subcategory_item}>
                                         <div className={s.subcategory_item_wrapper}>
                                             <div className={s.subcategory_item_image}>
-                                                <img src={item.picture_url} alt={item.title} />
+                                                <img loading="lazy" className={s.item_image} src={item.picture_url} alt={item.title} />
                                             </div>
                                             <div className={s.subcategory_item_info}>
                                                 <div className={s.subcategory_item_title}>
@@ -63,6 +71,7 @@ function SubcatalogDetails() {
                                     </div>
                                 ))
                             )}
+                            
                         </div>
                     </div>
                 </div>

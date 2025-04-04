@@ -272,14 +272,12 @@
     padding-bottom: 20px;
     padding-top: 5px;
     border-bottom: 1px solid #F4F4F4;
-
 }
 
 .main_catalog_category_wrapper{
     display: flex;
     width: 100%;
 }
-
 
 .main_catalog_item_title{
     font-size: 16px;
@@ -310,7 +308,6 @@
 
 .main_catalog_category{
     width: 100%;
-    
 }
 
 .main_catalog_category_wrapper{
@@ -321,7 +318,6 @@
     height: 95px;
     border-radius: 5px;
     margin-right: 10px;
-
 }
 
 .main_catalog_category_image img{ 
@@ -336,12 +332,8 @@
     line-height: 16.84px;
     text-align: center;
     overflow: hidden;
-    margin-right: 10px;
-
-    
+    margin-right: 10px;    
 }
-
-
 
 .main_catalog_category_info{
     display: flex;
@@ -353,7 +345,6 @@
 .main_catalog_category_title{
     text-align: start;
     width: 200px;
-
 }
 
 .main_catalog_category_title h2{
@@ -361,7 +352,6 @@
     font-weight: 600;
     line-height: 16.84px;
     text-align: left;
-
 }
 
 .main_catalog_category_title p{
@@ -386,7 +376,6 @@
     width: 100%;
 }
 
-
 .subcategory_name{
     width: 100%;
     display: flex;
@@ -394,7 +383,6 @@
     align-items: center;
     margin-bottom: 20px;
 }
-
 
 .categories_items{
     display: flex;
@@ -423,18 +411,13 @@
     gap: 10px;
     margin-top: 15px;
     padding-left: 0px;
-    padding-bottom: 15px;
-    
+    padding-bottom: 15px;   
 }
-
-
 
 .subcategory_item{
     height: 210px;
     overflow: visible;
-
     border-radius: 5%;
-
 }
 
 .subcategory_item_wrapper{
@@ -561,4 +544,186 @@
     line-height: 24.06px;
     text-align: left;
 
+}
+
+.payment_summary {
+    width: 100%;
+}
+
+.payment_summary_wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    border-radius: 16px;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px 0px #00000012;
+    border: 1px solid #FFFFFF;
+    color: #1A202C;
+    margin-bottom: 10px;
+}
+
+.payment_summary_wrapper h1{
+    font-weight: bold;
+}
+
+.payment_details{
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.payment_summary input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 5px;
+    background: linear-gradient(to right, #e4e2e2 var(--progress), #d3d3d3 var(--progress));
+    outline: none;
+    transition: background 0.2s;
+    position: relative;
+}
+
+.payment_summary input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 17px;
+    height: 17px;
+    background: white;
+    border: 2px solid #4CAF50;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+
+.payment_summary input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 2px solid #4CAF50;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+}
+
+.payment_button{
+    color: white;
+    gap: 8px;
+    border-radius: 50px;
+    padding-top: 16px;
+    padding-right: 32px;
+    padding-bottom: 16px;
+    padding-left: 32px;
+    background-color: #37B95F;
+    font-size: 14px;
+}   
+
+.payment_button:hover{
+    background-color: #2E9E4D;
+}
+
+.payment_button:active{
+    background-color: #258b42;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal_content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.modal h2 {
+    margin: 0;
+    font-size: 20px;
+    text-align: center;
+}
+
+.modal_input_group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.modal_input_group input {
+    padding: 8px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.modal_buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+}
+
+.cancel_button,
+.confirm_button {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cancel_button {
+    background: #dadada;
+    color: black;
+}
+
+.confirm_button {
+    background: #2cbe4e;
+    color: white;
+}
+
+.cancel_button:hover {
+    background: #dedddd;
+    color: black;
+}
+
+.confirm_button:hover {
+    background: #2bd352;
+    color: white;
+}
+
+.confirm_button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.success_message {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.error_message {
+    color: #dc3545;
+    font-weight: bold;
 }

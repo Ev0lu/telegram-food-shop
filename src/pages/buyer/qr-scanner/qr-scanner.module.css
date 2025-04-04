@@ -124,3 +124,13 @@
   border-radius: 16px;
   opacity: 0px;
 }
+
+.popup_button {
+  background-color: #ececec;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.popup_button:hover {
+  background-color: #f3f0f0;
+}

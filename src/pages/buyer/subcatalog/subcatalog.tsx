@@ -5,6 +5,7 @@ import Footer from '@/shared/footer/footer'
 import { useCart } from '@/shared/api/cart'
 import { CartControls } from '@/shared/ui/cart-controls/cart-controls'
 import { useGetActionsQuery, useGetCatalogsCategoryQuery, useGetProductsQuery } from '@/shared/api/products'
+import { useState } from 'react'
 
 function Subcatalog() {
   const navigate = useNavigate()
@@ -14,8 +15,11 @@ function Subcatalog() {
   const { data: categoryData, isLoading: isLoadingCategory } = useGetCatalogsCategoryQuery(categoryId)
   const { data: actionsData, isLoading: isLoadingActions } = useGetActionsQuery(categoryId)
   const { data: productsData, isLoading: isLoadingProducts } = useGetProductsQuery(categoryId)
-
-  const { cart, cartStatus, handleAddToCart, handleDecreaseItem } = useCart()
+  const { cart, handleAddToCart, handleDecreaseItem } = useCart()
+  const [searchTerm, setSearchTerm] = useState('')
+  const filteredProducts = productsData?.products.filter((item: any) =>
+      item.title.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   return (
     <div className={s.main_catalog}>
@@ -23,7 +27,10 @@ function Subcatalog() {
         <div className={`${s.main_catalog_search} ${s.fixedItemSearch}`}>
           <div className={s.main_catalog_search_wrapper}>
             <img className={s.main_catalog_search_image} src={search_image} alt="Поиск" />
-            <input className={s.main_catalog_search_input} placeholder="Поиск по товарам" />
+            <input               
+              value={searchTerm} 
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className={s.main_catalog_search_input} placeholder="Поиск по товарам" />
           </div>
         </div>
         <div className={s.top_category_name}>
@@ -40,7 +47,7 @@ function Subcatalog() {
                 <div className={s.main_catalog_item}>
                   <div className={s.main_catalog_item_wrapper}>
                     <div className={s.main_catalog_item_image}>
-                      <img src={item.product.picture_url} alt={item.product.title} />
+                      <img loading="lazy" className={s.item_image} src={item.product.picture_url} alt={item.product.title} />
                     </div>
                     <div className={s.main_catalog_item_info}>
                       <div className={s.main_catalog_item_title}>
@@ -59,6 +66,7 @@ function Subcatalog() {
             ))
           )}
         </div>
+        {(
         <div className={s.subcategory_promotional_goods}>
           <div className={s.subcategory_name}>
             <h1>{isLoadingCategory ? 'Загрузка...' : categoryData?.category?.title}</h1>
@@ -74,11 +82,11 @@ function Subcatalog() {
               {isLoadingProducts ? (
                 <p>Загрузка...</p>
               ) : (
-                productsData?.products.map((item) => (
+                filteredProducts && filteredProducts.map((item) => (
                   <div key={item.entry_id} className={s.subcategory_item}>
                     <div className={s.subcategory_item_wrapper}>
                       <div className={s.subcategory_item_image}>
-                        <img src={item.picture_url} alt={item.title} />
+                        <img loading="lazy" className={s.item_image} src={item.picture_url} alt={item.title} />
                       </div>
                       <div className={s.subcategory_item_info}>
                         <div className={s.subcategory_item_title}>
@@ -106,6 +114,7 @@ function Subcatalog() {
             </div>
           </div>
         </div>
+        )}
         <Footer />
       </div>
     </div>

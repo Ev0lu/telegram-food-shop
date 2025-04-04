@@ -3,18 +3,30 @@ import s from './main-catalog.module.css'
 import { search_image, bonuses_logo } from '@/shared/assets'
 import Footer from '@/shared/footer/footer'
 import { useGetActionsQuery, useGetCatalogsCategoryQuery } from '@/shared/api/products'
+import { useState } from 'react'
 
 function MainCatalog() {
   const navigate = useNavigate()
   const { data: categoriesData, isLoading: isLoadingCategories } = useGetCatalogsCategoryQuery('')
   const { data: actionsData, isLoading: isLoadingActions } = useGetActionsQuery('')
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const filteredCategories = categoriesData?.categories?.filter((item: any) =>
+    item.title.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+  
   return (
     <div className={s.main_catalog}>
       <div className={s.main_catalog_wrapper}>
         <div className={`${s.main_catalog_search} ${s.fixedItemSearch}`}>
           <div className={s.main_catalog_search_wrapper}>
             <img className={s.main_catalog_search_image} src={search_image} alt="Поиск" />
-            <input className={s.main_catalog_search_input} placeholder="Поиск по товарам" />
+            <input 
+              className={s.main_catalog_search_input} 
+              placeholder="Поиск по категориям" 
+              value={searchTerm} 
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />          
           </div>
         </div>
 
@@ -28,7 +40,7 @@ function MainCatalog() {
                 <div key={index} className={s.main_catalog_item}>
                   <div className={s.main_catalog_item_wrapper}>
                     <div className={s.main_catalog_item_image}>
-                      <img src={item.product.picture_url} alt={item.product.title} />
+                      <img loading="lazy" src={item.product.picture_url} alt={item.product.title} />
                     </div>
                     <div className={s.main_catalog_item_info}>
                       <div className={s.main_catalog_item_title}>
@@ -55,7 +67,7 @@ function MainCatalog() {
             <p>Загрузка...</p>
           ) : (
             <div className={s.main_catalog_categories}>
-              {categoriesData && categoriesData.categories.map((item: any) => (
+              {filteredCategories && filteredCategories.map((item: any) => (
                 <div key={item.entry_id} onClick={() => navigate(`/subcatalog_buyer/${item.entry_id}`)} className={s.main_catalog_category}>
                   <div className={s.main_catalog_category_wrapper}>
                     <div className={s.main_catalog_category_image}>

@@ -47,6 +47,8 @@ export const { useGetCartQuery, useAppendCartMutation, useRemoveCartMutation, us
 export const useCart = () => {
   const dispatch = useDispatch<AppDispatch>();
   const cart = useSelector((state: RootState) => state.cart.items);
+  const maxPoints = useSelector((state: RootState) => state.cart.max_points);
+  const minPoints = useSelector((state: RootState) => state.cart.min_points);
   const cartStatus = useSelector((state: RootState) => state.cart.status);
 
   useEffect(() => {
@@ -70,6 +72,8 @@ export const useCart = () => {
     cartStatus,
     handleAddToCart,
     handleDecreaseItem,
-    handleClearCart
+    handleClearCart,
+    maxPoints,
+    minPoints
   };
 };

@@ -1,16 +1,40 @@
-import s from './cart.module.css'
-import { clock, search_image, bananas } from '../../../shared/assets'
-import Footer from '../../../shared/footer/footer'
-import { useCart } from '@/shared/api/cart'
+import { useState } from 'react';
+import s from './cart.module.css';
+import { search_image, bananas } from '../../../shared/assets';
+import Footer from '../../../shared/footer/footer';
+import { useCart } from '@/shared/api/cart';
+import { useGetUserInfoQuery } from '@/shared/api/buyer-info';
+import { useCreateOrderMutation } from '@/shared/api/orders';
 
 function Cart() {
-    const { cart, handleAddToCart, handleDecreaseItem, handleClearCart } = useCart();
+    const telegramId = sessionStorage.getItem('telegram_id');
+    const { data } = useGetUserInfoQuery(telegramId);
+    const { cart, maxPoints, minPoints, handleAddToCart, handleDecreaseItem, handleClearCart } = useCart();
+    const points = data?.user.points >= maxPoints ? maxPoints : data?.user.points || 0;
+    const totalCost = cart?.reduce((sum, item) => sum + item.item.price * item.count, 0) || 0;
+    const [pointsUsed, setPointsUsed] = useState(0);
+    const [createOrder, { isLoading, isSuccess, error }] = useCreateOrderMutation();
+    
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [email, setEmail] = useState('');    
+    
+    const handleCreateOrderWithDetails = async () => {
+        try {
+            await createOrder({ points_spent: pointsUsed, email });
+            setTimeout(() => {
+                setIsModalOpen(false);
+                handleClearCart();
+            }, 2000);
+        } catch (err) {
+        }
+    };
+
     return (
         <div className={s.main_catalog}>
             <div className={s.main_catalog_wrapper}>
                 <div className={`${s.main_catalog_search} ${s.fixedItemSearch}`}>
                     <div className={s.main_catalog_search_wrapper}>
-                        <img className={s.main_catalog_search_image} src={search_image}></img>
+                        <img className={s.main_catalog_search_image} src={search_image} alt="search" />
                         <input className={s.main_catalog_search_input} placeholder='Поиск по товарам' />
                     </div>
                 </div>
@@ -37,17 +61,9 @@ function Cart() {
                                 </div>
                                 <div className={s.main_catalog_category_title_price}>
                                     <div className={s.main_catalog_category_title_price_button}>
-                                    <p
-                                        onClick={() => handleDecreaseItem(item.item.entry_id)}
-                                    >
-                                        -
-                                    </p>
+                                    <p onClick={() => handleDecreaseItem(item.item.entry_id)}>-</p>
                                     <p>{item.count}шт</p>
-                                    <p
-                                        onClick={() => handleAddToCart(item.item.entry_id)}
-                                    >
-                                        +
-                                    </p>
+                                    <p onClick={() => handleAddToCart(item.item.entry_id)}>+</p>
                                     </div>
                                     <h2>{item.item.price * item.count}р</h2>
                                 </div>
@@ -57,46 +73,78 @@ function Cart() {
                         </div>
                         ))}
                     </div>
-                    <div className={s.bonuses}>
-                        <img src={clock} />
-                        <div className={s.bonuses_count}>
-                            <p>Доставим в течении 2 часов</p>
+                </div>
+                
+                <div className={s.payment_summary}>
+                    <div className={s.payment_summary_wrapper}>
+                        <h1 style={{fontSize: '18px'}}>Оплата</h1>
+                        <div className={s.payment_details}>
+                            <p style={{fontWeight: 'bold'}}>Сумма заказа</p>
+                            <p>{totalCost}₽</p>
                         </div>
+                        <div className={s.payment_details}>
+                            <p style={{fontWeight: 'bold'}}>Оплата с пятаками:</p>
+                        </div>
+                        <input
+                            type="range"
+                            min="0"
+                            max={Math.min(points, totalCost)}
+                            value={pointsUsed}
+                            onChange={(event: any) => {
+                                const newPoints = Math.min(Number(event.target.value), points, totalCost);
+                                setPointsUsed(newPoints);
+                            }}
+                            style={{ "--progress": points > 0 ? `${(pointsUsed / Math.min(points, totalCost)) * 100}%` : "0%" } as React.CSSProperties}
+                        />
+
+                        <div className={s.payment_details}>
+                            <p style={{fontWeight: 'bold'}}>ИТОГО</p>
+                            <p>{totalCost - pointsUsed}₽</p>
+                        </div>
+                        {points < minPoints && (
+                            <p className={s.error_message}>
+                                У вас недостаточно бонусов. Минимальное количество для создания заказа - {minPoints}
+                            </p>
+                        )}
+                        {pointsUsed < minPoints && points >= minPoints && (
+                            <p className={s.error_message}>
+                                Минимальное количество использованных бонусов для создания заказа - {minPoints}
+                            </p>
+                        )}
+                        <button onClick={() => setIsModalOpen((prev) => !prev)} className={s.payment_button} disabled={points < minPoints || (points >= minPoints && pointsUsed < minPoints)}>
+                            Перейти к оплате
+                        </button>
                     </div>
                 </div>
-                {/* <div className={s.orders_interests_title}>
-                    <h1>Вас может заинтересовать</h1>
-                </div>
-                <div className={s.subcategory_promotional_goods}>
-                    <div className={s.subcategory_items}>
-                        <div className={s.categories_items}>
-                            <div className={s.subcategory_item}>
-                                <div className={s.subcategory_item_wrapper}>
-                                    <div className={s.subcategory_item_image}>
-                                        <img src={bananas}></img>
-                                    </div>
-                                    <div className={s.subcategory_item_info}>
-                                        <div className={s.subcategory_item_title}>
-                                            <h2>Кукурузные хлопьяыыыыыыыыыыыы</h2>
-                                        </div>
-                                        <div className={s.subcategory_item_desciption}>
-                                            <p className={s.subcategory_item_desciption_price}>100Р/кг</p>
-                                            <p className={s.subcategory_item_desciption_weight}>200гр</p>
-                                        </div>
-                                        <div className={s.subcategory_item_add_button}>
-                                            <img src={shopping_cart}></img>
-                                            <p>В корзину</p>
-                                        </div>
-                                    </div>
-                                </div>
+
+                {isModalOpen && (
+                    <div className={s.modal}>
+                        <div className={s.modal_content}>
+                            <h2>Оформление заказа</h2>
+                            <div className={s.modal_input_group}>
+                                <input
+                                    id="email"
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="Введите почту для чека"
+                                />
+                            </div>
+                            {isLoading && <p>Создание заказа...</p>}
+                            {isSuccess && <p className={s.success_message}>Заказ успешно создан! ✅</p>}
+                            {error && <p className={s.error_message}>Ошибка при создании заказа. Попробуйте снова.</p>}
+                            <div className={s.modal_buttons}>
+                                <button onClick={() => setIsModalOpen((prev) => !prev)} className={s.cancel_button}>Отмена</button>
+                                <button onClick={handleCreateOrderWithDetails} className={s.confirm_button}>Создать заказ</button>
                             </div>
                         </div>
                     </div>
-                </div> */}
+                )}
+
                 <Footer />
             </div>
         </div>
-    )
+    );
 }
 
-export default Cart
+export default Cart;

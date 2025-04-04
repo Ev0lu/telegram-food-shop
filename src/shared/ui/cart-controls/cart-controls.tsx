@@ -23,7 +23,7 @@ export const CartControls: React.FC<CartControlsProps> = ({ count, onIncrease, o
           </button>
         </div>
       ) : (
-        <button className={s.main_catalog_item_add_button_main} onClick={onIncrease}>
+        <button className={`${s.main_catalog_item_add_button_main}`} onClick={onIncrease}>
           <img src={shopping_cart} alt="В корзину" />
           <p>В корзину</p>
         </button>

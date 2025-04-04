@@ -187,7 +187,7 @@
     grid-template-columns: repeat(3, 1fr);
     overflow: auto;
     width: 100%;
-    gap: 10px;
+    gap: 5px;
     margin-top: 15px;
     padding-left: 0px;
     padding-bottom: 15px;
@@ -229,7 +229,7 @@
 .subcategory_item_wrapper {
     display: flex;
     flex-direction: column;
-    width: 125px;
+    width: 115px;
     padding: 5px;
     border-radius: 5%;
     border-collapse: collapse;
@@ -280,7 +280,7 @@
 .subcategory_item_desciption {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 .subcategory_item_desciption_price {
@@ -344,4 +344,9 @@
 
 .categories_items::-webkit-scrollbar {
     display: none;
+}
+
+.item_image {
+    height: 100px;
+    object-fit: cover;
 }

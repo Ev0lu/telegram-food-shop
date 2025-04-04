@@ -1,3 +1,7 @@
+img {
+    object-fit: cover;
+}
+
 .main_catalog {
     width: 100%;
 }
@@ -189,12 +193,10 @@
     color: #999999;
 }
 
-
 .main_catalog_category {
     width: 100px;
     overflow: hidden;
     cursor: pointer;
-
 }
 
 .main_catalog_category_image {

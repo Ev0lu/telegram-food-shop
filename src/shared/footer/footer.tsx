@@ -1,16 +1,13 @@
 import s from './footer.module.css'
 import { catalog_menu, scanner_menu, user_menu, shopping_cart_menu } from '../../shared/assets'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 function Footer() {
-
     const navigate = useNavigate()
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
 
     return (
         <div className={`${s.menu} ${s.fixedItem}`}>
-            <div onClick={() => navigate('/qrscan_buyer')} className={s.menu_item}>
+            <div onClick={() => navigate('/buyer/qrscan')} className={s.menu_item}>
                 <div className={s.menu_item_img}>
                     <img src={scanner_menu} />
                 </div>

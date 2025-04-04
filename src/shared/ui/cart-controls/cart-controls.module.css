@@ -61,6 +61,7 @@
 }
 
 .main_catalog_item_add_button_main {
+    white-space: nowrap;
     display: flex;
     align-items: center;
     justify-content: center;

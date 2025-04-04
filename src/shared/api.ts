@@ -19,24 +19,6 @@ export async function fetchApiResponse(
   return response
 }
 
-export async function getUserInfo(id: string) {
-  return await fetchApiResponse(`users/${id}`, {
-    headers: {
-      'accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-}
-
-export async function getUserInfoAboutOrders(id: string) {
-  return await fetchApiResponse(`users/orders/${id}`, {
-    headers: {
-      'accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-}
-
 export const apiBaseQuery = fetchBaseQuery({
   baseUrl: apiUrl,
   prepareHeaders: (headers) => {
