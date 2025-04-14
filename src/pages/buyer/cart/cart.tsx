@@ -20,14 +20,16 @@ function Cart() {
     
     const handleCreateOrderWithDetails = async () => {
         try {
-            await createOrder({ points_spent: pointsUsed, email });
-            setTimeout(() => {
-                setIsModalOpen(false);
+            const response = await createOrder({ points_spent: pointsUsed, email }).unwrap();
+            if (response.payment_link) {
                 handleClearCart();
-            }, 2000);
+                window.location.href = response.payment_link
+            }
         } catch (err) {
         }
     };
+
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     return (
         <div className={s.main_catalog}>
@@ -85,17 +87,21 @@ function Cart() {
                         <div className={s.payment_details}>
                             <p style={{fontWeight: 'bold'}}>Оплата с пятаками:</p>
                         </div>
-                        <input
-                            type="range"
-                            min="0"
-                            max={Math.min(points, totalCost)}
-                            value={pointsUsed}
-                            onChange={(event: any) => {
-                                const newPoints = Math.min(Number(event.target.value), points, totalCost);
-                                setPointsUsed(newPoints);
-                            }}
-                            style={{ "--progress": points > 0 ? `${(pointsUsed / Math.min(points, totalCost)) * 100}%` : "0%" } as React.CSSProperties}
-                        />
+                        {data?.user.points ? (
+                            <input
+                                type="range"
+                                min="0"
+                                max={Math.min(points, totalCost)}
+                                value={pointsUsed}
+                                onChange={(event: any) => {
+                                    const newPoints = Math.min(Number(event.target.value), points, totalCost);
+                                    setPointsUsed(newPoints);
+                                }}
+                                style={{ "--progress": points > 0 ? `${(pointsUsed / Math.min(points, totalCost)) * 100}%` : "0%" } as React.CSSProperties}
+                            />
+                        ) : (
+                            <p style={{fontSize: '14px', color: 'grey'}}>Нет пятаков</p>
+                        )}
 
                         <div className={s.payment_details}>
                             <p style={{fontWeight: 'bold'}}>ИТОГО</p>
@@ -135,7 +141,7 @@ function Cart() {
                             {error && <p className={s.error_message}>Ошибка при создании заказа. Попробуйте снова.</p>}
                             <div className={s.modal_buttons}>
                                 <button onClick={() => setIsModalOpen((prev) => !prev)} className={s.cancel_button}>Отмена</button>
-                                <button onClick={handleCreateOrderWithDetails} className={s.confirm_button}>Создать заказ</button>
+                                <button disabled={!isEmailValid} onClick={handleCreateOrderWithDetails} className={s.confirm_button}>Создать заказ</button>
                             </div>
                         </div>
                     </div>

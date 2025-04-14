@@ -33,6 +33,9 @@ export const sessionLoader = async () => {
             sessionStorage.setItem('telegram_id', `${searchParams.get('telegram_id')}`)          
         }
     }
+    if (searchParams.get('access_token')) setToken("access", searchParams.get('access_token'));
+    if (searchParams.get('refresh_token')) setToken("refresh", searchParams.get('refresh_token'));
+
     if (isTokenExpired("access")) {
         const refreshToken = getToken("refresh");
         if (refreshToken) {

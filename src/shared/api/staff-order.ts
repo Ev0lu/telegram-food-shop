@@ -5,7 +5,7 @@ export const staffOrdersApi = createApi({
     reducerPath: "staffOrdersApi",
     baseQuery: fetchBaseQuery({ baseUrl: "https://bot5ka.ru/api/v1" }),
     endpoints: (builder) => ({
-        removeProduct: builder.mutation<void, { orderId: string; productId: string; staffId: string }>({
+        removeProduct: builder.mutation<{ status: string; order: any; products_quantity: any, }, { orderId: string; productId: string; staffId: string }>({
             query: ({ orderId, productId, staffId }) => ({
                 url: `/staff/orders/${orderId}`,
                 method: "PATCH",

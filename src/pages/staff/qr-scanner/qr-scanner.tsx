@@ -20,11 +20,12 @@ const ScanPage: FC = () => {
         <div className={`${s.popup} ${showPopup ? s.active : ""}`}>
           <h2>Детальная информация</h2>
           <div className={s.products}>
-            {scanData.products.map((product) => (
+            {scanData.order.products.map((product: any) => (
               <div key={product.entry_id} className={s.productItem}>
                 <img className={s.productItemImage} src={product.picture_url} />
                 <div className={s.productInfo}>
                   <h3 style={{ fontSize: "16px" }}>{product.title}</h3>
+                  <p>Кол-во: {scanData.products_quantity[product.entry_id]}</p>
                   <div className={s.productDescription}>
                     <p style={{ fontWeight: "600", fontSize: "14px" }}>{product.price}Р</p>
                     <p style={{ fontSize: "14px" }}>{product.product_quantity}</p>
@@ -35,7 +36,10 @@ const ScanPage: FC = () => {
           </div>
           <div className={s.buttons}>
             <button className={s.greenButton}>Выдать</button>
-            <button className={s.redButton} onClick={() => navigate("edit", { state: { scanData } })}>
+            <button className={s.redButton} onClick={() => {
+              navigate("/staff/scanner/edit", { state: { scanData: scanData.order, quantity: scanData.products_quantity } })
+              
+              }}>
               Изменить
             </button>
           </div>

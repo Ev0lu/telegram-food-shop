@@ -31,8 +31,12 @@ function UserProfile() {
       }
     };
     
+    const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+
+
     const [currentOrderIndex, setCurrentOrderIndex] = useState(0);
     const currentOrder = userOrders?.orders?.[currentOrderIndex];
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     if (isUserLoading || isOrdersLoading) return <div style={{ padding: '15px' }}>Загрузка...</div> 
 
@@ -77,7 +81,7 @@ function UserProfile() {
                     {isModalOpen && (
                         <div className={s.modal}>
                         <div className={s.modal_content}>
-                            <h2 style={{fontFamily: 'Formular', fontSize: '16px'}}>Покупка бонусов</h2>
+                            <h2 style={{fontFamily: '5ka Sans Design', fontSize: '16px'}}>Покупка бонусов</h2>
                             <input
                             value={points}
                             className={s.modal_input}
@@ -91,16 +95,24 @@ function UserProfile() {
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Введите email"
                             />
-                            <p style={{fontFamily: 'Formular'}}>Курс: {pointsPrice}₽ за 1 бонус</p>
+                            <p style={{fontFamily: '5ka Sans Design'}}>Курс: {pointsPrice}₽ за 1 бонус</p>
                             {error && <p className={s.error}>Ошибка при создании платежа</p>}
                             <div className={s.modal_buttons}>
                                 <button className={s.close_modal_button} onClick={() => setIsModalOpen(false)}>Закрыть</button>
-                                <button className={s.buy_modal_button} onClick={handlePurchase} disabled={isLoading}>Купить</button>
+                                <button className={s.buy_modal_button} onClick={handlePurchase} disabled={!isEmailValid || isLoading}>Купить</button>
                             </div>
                         </div>
                         </div>
                     )}
                 </div>
+                {isQRModalOpen && (
+                    <div className={s.qr_modal} onClick={() => setIsQRModalOpen(false)}>
+                        <div className={s.qr_modal_content}>
+                        <QRCodeCanvas value={currentOrder.entry_id} size={300} />
+                        </div>
+                    </div>
+                )}
+
                 {currentOrder && (
                     <div className={s.main_catalog_promotional_goods}>
                         <div className={s.orders_history_title}>
@@ -112,7 +124,7 @@ function UserProfile() {
                                     }
                                 }} />
                                 <img style={{cursor: 'pointer'}} src={arrow_right} onClick={() => {
-                                    if (currentOrderIndex < userOrders?.length - 1) {
+                                    if (currentOrderIndex < userOrders?.orders?.length - 1) {
                                         setCurrentOrderIndex((prev) => prev + 1);
                                     }
                                 }} />
@@ -122,13 +134,14 @@ function UserProfile() {
                         <div className={s.bonuses}>
                             <p>{currentOrder?.creation_date.split('-').reverse().join('.')}</p>
                             <div className={s.bonuses_count}>
-                                <p>{currentOrder?.money_spent}р</p>
+                                <p>{currentOrder?.price}р</p>
                             </div>
-                            {currentOrder.status === "pending" && (
+                            {currentOrder.status === "paid" && (
                                 <>
                                     <button onClick={async () => {
                                         try {
                                             await deprecateOrder(currentOrder.entry_id).unwrap();
+                                            if (currentOrderIndex === userOrders?.orders?.length - 1) setCurrentOrderIndex((prev) => prev - 1)
                                             refetch()
                                         } catch (err) {
                                             console.error("Ошибка при отмене заказа:", err);
@@ -137,7 +150,7 @@ function UserProfile() {
                                     className={s.cancel_button}>
                                         Отменить заказ
                                     </button>
-                                    <QRCodeCanvas value={currentOrder.entry_id} size={50} />
+                                    <QRCodeCanvas value={currentOrder.entry_id} size={50} onClick={() => setIsQRModalOpen(true)} style={{ cursor: 'pointer' }} />
                                 </>
                             )}
                         </div>

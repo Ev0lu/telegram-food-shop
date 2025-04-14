@@ -14,12 +14,14 @@ interface Product {
 interface ScanResponse {
     entry_id: string;
     products: Product[];
+    products_quantity: Record<string, number>;
 }
 
 const EditOrderPage: FC = () => {
     const location = useLocation();
     const navigate = useNavigate()
     const [scanData, setScanData] = useState<ScanResponse | undefined>(location.state?.scanData)
+    const [quantities, setQuantities] = useState<Record<string, number>>(location.state?.quantity || {});
     const [removeProduct] = useRemoveProductMutation();
     const [acceptOrder] = useAcceptOrderMutation();
     const [rejectOrder] = useRejectOrderMutation();
@@ -28,27 +30,19 @@ const EditOrderPage: FC = () => {
 
     const handleRemoveProduct = async (productId: string) => {
         try {
-            await removeProduct({
+            let data = await removeProduct({
                 orderId: scanData.entry_id,
                 productId,
                 staffId: sessionStorage.getItem("telegram_id")!,
             }).unwrap();
+            if (data?.products_quantity) setQuantities(data.products_quantity);
 
-            setScanData(prevData => {
-                if (prevData) {
-                    return {
-                        ...prevData,
-                        products: prevData.products.filter(product => product.entry_id !== productId),
-                    };
-                }
-                return prevData; 
-            });
+            if (data?.order) setScanData(data.order);
 
         } catch (error) {
             console.error("Ошибка при удалении продукта", error);
         }
     };
-
 
     return (
         <div className={s.container}>
@@ -60,8 +54,11 @@ const EditOrderPage: FC = () => {
                             <img src={product.picture_url} alt={product.title} />
                             <div>
                                 <h3>{product.title}</h3>
-                                <p>{product.product_quantity}</p>
-                                <p>{product.price}Р</p>
+                                <p>Кол-во: {quantities[product.entry_id]}</p>
+                                <div className={s.productDescription}>
+                                    <p style={{ fontWeight: "600", fontSize: "14px" }}>{product.price}Р</p>
+                                    <p style={{ fontSize: "14px" }}>{product.product_quantity}</p>
+                                </div>
                             </div>
                         </div>
                         <button className={s.remove_button} onClick={() => handleRemoveProduct(product.entry_id)}>−</button>

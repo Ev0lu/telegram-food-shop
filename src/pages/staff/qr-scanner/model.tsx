@@ -14,12 +14,14 @@ interface Product {
 }
 
 interface ScanResponse {
+  order: any;
   entry_id: string;
   price: number;
   points_spent: number;
   creation_date: string;
   money_spent: number;
   products: Product[];
+  products_quantity: any;
 }
 
 export const useScanOrder = () => {
@@ -36,14 +38,14 @@ export const useScanOrder = () => {
       codeReader.decodeFromVideoDevice(null, videoElement, async (result) => {
         if (result) {
           const barcode = result.getText();
-          setScannedCode(barcode);
+          setScannedCode(barcode.trim());
           try {
-            const response = await fetch(`https://bot5ka.ru/api/v1/orders/${barcode}`, {
+            const response = await fetch(`https://bot5ka.ru/api/v1/orders/${barcode.trim()}`, {
               headers: { "Content-Type": "application/json" },
             });
             if (response.ok) {
               const data = await response.json();
-              setScanData(data.order);
+              setScanData(data);
               setShowPopup(true);
             } else {
               setError("Ошибка на сервере. Попробуйте снова.");
