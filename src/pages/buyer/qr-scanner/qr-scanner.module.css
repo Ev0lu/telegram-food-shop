@@ -1,0 +1,136 @@
+.camera_container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1A202C;
+}
+
+.full_screen_webcam {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10;
+}
+
+.scan_frame {
+  z-index: 11;
+  position: absolute;
+  width: 250px;
+  height: 150px;
+}
+
+.scan_frame::before,
+.scan_frame::after {
+  content: "";
+  position: absolute;
+  width: 60px;
+  height: 40px;
+  border: 3px solid white;
+  border-radius: 5%;
+}
+
+.scan_frame::before {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.scan_frame::after {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+}
+
+.scan_frame span::before,
+.scan_frame span::after {
+  content: "";
+  position: absolute;
+  width: 60px;
+  height: 40px;
+  border: 3px solid white;
+  border-radius: 5%;
+}
+
+.scan_frame span::before {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+}
+
+.scan_frame span::after {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+.popup {
+  z-index: 20;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+  z-index: 999999;
+}
+
+.popup_enter {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.9);
+}
+
+.popup_enter_active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.popup_exit {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.popup_exit_active {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.9);
+}
+
+.success {
+  border: 2px solid green;
+  width: 328px;
+  height: 241px;
+  padding: 24px 40px 24px 40px;
+  gap: 24px;
+  border-radius: 16px;
+  opacity: 0px;
+
+}
+
+.error {
+  width: 328px;
+  height: 241px;
+  padding: 24px 40px 24px 40px;
+  gap: 24px;
+  border-radius: 16px;
+  opacity: 0px;
+}
+
+.popup_button {
+  background-color: #ececec;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.popup_button:hover {
+  background-color: #f3f0f0;
+}

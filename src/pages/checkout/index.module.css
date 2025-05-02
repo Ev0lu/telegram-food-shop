@@ -1,0 +1,12 @@
+.checkout {
+    width: 100%;
+    padding: 15px;
+}
+
+.checkout_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    text-align: center;
+}
